@@ -11,7 +11,14 @@ func Hello(w http.ResponseWriter, request *http.Request){
 }
 
 func Login(w http.ResponseWriter, request *http.Request) {
-
+	headers := GetHeadersFromRequest(request)
+	status := auth.SignIn(headers)
+	
+	response := "NOK"
+	if status {
+		response = "OK"
+	}
+	fmt.Fprintf(w, "Login status: " + response)
 }
 
 func Logout(w http.ResponseWriter, request *http.Request) {
@@ -20,6 +27,6 @@ func Logout(w http.ResponseWriter, request *http.Request) {
 
 func SignUp(w http.ResponseWriter, request *http.Request) {
 	headers := GetHeadersFromRequest(request)
-	x := auth.SignUp(headers["Username"], headers["Password"])
-	fmt.Fprintf(w, "signup\n", x)
+	token := auth.SignUp(headers["Username"], headers["Password"])
+	fmt.Fprintf(w, "token\n", token)
 }
